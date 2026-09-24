@@ -1,337 +1,326 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>welcome to Lorraine's studio</title>
-    
-    <title>精确北京时间</title>
-    <!-- 引入等宽数字字体，防止跳动时宽度抖动 -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lorraine's Studio | 精确北京时间</title>
+
+    <!-- 引入等宽数字字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
     <style>
-        :root {
-            --bg-color: #0f172a;
-            --card-bg: rgba(30, 41, 59, 0.7);
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --accent-glow: rgba(56, 189, 248, 0.5);
-            --ms-color: #38bdf8;
-        }
+      :root {
+        --bg-color: #0f172a;
+        --card-bg: rgba(30, 41, 59, 0.7);
+        --text-primary: #f8fafc;
+        --text-secondary: #94a3b8;
+        --accent-glow: rgba(56, 189, 248, 0.5);
+        --ms-color: #38bdf8;
+      }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        body {
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: radial-gradient(circle at top left, #1e293b, #0f172a);
-            font-family: 'JetBrains Mono', monospace;
-            overflow: hidden;
-            color: var(--text-primary);
-        }
+      body {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: radial-gradient(circle at top left, #1e293b, #0f172a);
+        font-family: "JetBrains Mono", monospace;
+        color: var(--text-primary);
+        padding: 20px;
+      }
 
-        /* 背景动态光斑装饰 */
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            z-index: 0;
-            opacity: 0.4;
-            animation: float 10s infinite ease-in-out alternate;
-        }
-        .orb-1 { width: 300px; height: 300px; background: #3b82f6; top: 10%; left: 20%; }
-        .orb-2 { width: 400px; height: 400px; background: #8b5cf6; bottom: 10%; right: 15%; animation-delay: -5s; }
+      /* 背景动态光斑 */
+      .orb {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(80px);
+        z-index: 0;
+        opacity: 0.4;
+        animation: float 10s infinite ease-in-out alternate;
+        pointer-events: none;
+      }
+      .orb-1 {
+        width: 300px;
+        height: 300px;
+        background: #3b82f6;
+        top: 10%;
+        left: 20%;
+      }
+      .orb-2 {
+        width: 400px;
+        height: 400px;
+        background: #8b5cf6;
+        bottom: 10%;
+        right: 15%;
+        animation-delay: -5s;
+      }
+      @keyframes float {
+        0% { transform: translate(0, 0); }
+        100% { transform: translate(30px, 50px); }
+      }
 
-        @keyframes float {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(30px, 50px); }
-        }
+      /* 主容器 */
+      .container {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        max-width: 600px;
+        width: 100%;
+      }
 
-        /* 时钟卡片容器 */
-        .clock-card {
-            position: relative;
-            z-index: 1;
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            padding: 3rem 4rem;
-            text-align: center;
-            box-shadow: 
-                0 25px 50px -12px rgba(0, 0, 0, 0.5),
-                inset 0 1px 1px rgba(255, 255, 255, 0.1);
-        }
+      /* 时钟卡片 */
+      .clock-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--card-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        padding: 3rem 4rem;
+        margin-bottom: 40px;
+        box-shadow:
+          0 25px 50px -12px rgba(0, 0, 0, 0.5),
+          inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      }
 
-        .label {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-            font-weight: 700;
-        }
+      .label {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        color: var(--text-secondary);
+        font-weight: 700;
+      }
 
-        .date-display {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            margin-bottom: 1.5rem;
-            font-weight: 400;
-        }
+      .date-display {
+        font-size: 1.1rem;
+        color: var(--text-secondary);
+        font-weight: 400;
+        min-height: 1.6em;
+      }
 
-        .time-wrapper {
-            display: flex;
-            align-items: baseline;
-            justify-content: center;
-            gap: 4px;
-            text-shadow: 0 0 20px var(--accent-glow);
-        }
+      .time-wrapper {
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
+        gap: 4px;
+        text-shadow: 0 0 20px var(--accent-glow);
+      }
 
-        .time-main {
-            font-size: clamp(3rem, 8vw, 6rem);
-            font-weight: 700;
-            line-height: 1;
-            font-variant-numeric: tabular-nums; /* 关键：等宽数字 */
-        }
+      .time-main {
+        font-size: clamp(3rem, 8vw, 5.5rem);
+        font-weight: 700;
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+      }
 
-        .time-ms {
-            font-size: clamp(1.5rem, 4vw, 2.5rem);
-            color: var(--ms-color);
-            font-weight: 400;
-            min-width: 3.5ch;
-            text-align: left;
-            opacity: 0.9;
-        }
+      .time-ms {
+        font-size: clamp(1.5rem, 4vw, 2.2rem);
+        color: var(--ms-color);
+        font-weight: 400;
+        min-width: 3.5ch;
+        text-align: left;
+        opacity: 0.9;
+        font-variant-numeric: tabular-nums;
+      }
+      .time-ms::before {
+        content: ".";
+        margin-right: 2px;
+      }
 
-        /* 毫秒部分的微妙呼吸动画 */
-        .time-ms::before {
-            content: '.';
-            margin-right: 2px;
-        }
+      /* 个人信息区 */
+      h1 {
+        font-size: 2.2rem;
+        margin-bottom: 8px;
+        background: linear-gradient(45deg, #667eea, #764ba2, #f093fb);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
 
-        @media (max-width: 600px) {
-            .clock-card { padding: 2rem 1.5rem; width: 90%; }
-        }
+      .subtitle {
+        color: var(--text-secondary);
+        font-size: 1rem;
+        margin-bottom: 28px;
+      }
 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            color: #fff;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
+      .card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 28px 32px;
+        margin-bottom: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        text-align: left;
+      }
+      .card p {
+        color: #ccc;
+        line-height: 1.8;
+        font-size: 1rem;
+      }
+      .tags {
+        margin-top: 16px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .tag {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 4px 14px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        color: #ccc;
+      }
 
-        .container {
-            text-align: center;
-            max-width: 600px;
-        }
+      /* 链接按钮 */
+      .links {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .link-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 14px 20px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 12px;
+        color: #fff;
+        text-decoration: none;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+      }
+      .link-btn:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      }
 
-        .avatar {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 24px;
-            font-size: 48px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
+      .footer {
+        margin-top: 32px;
+        color: #555;
+        font-size: 0.8rem;
+      }
 
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 8px;
-            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .subtitle {
-            color: #aaa;
-            font-size: 1.1rem;
-            margin-bottom: 32px;
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 32px;
-            margin-bottom: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .card p {
-            color: #ccc;
-            line-height: 1.8;
-            font-size: 1.05rem;
-        }
-
-        .links {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .link-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 14px 24px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
-            color: #fff;
-            text-decoration: none;
-            font-size: 1.05rem;
-            transition: all 0.3s ease;
-        }
-
-        .link-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-        }
-
-        .link-btn .icon {
-            font-size: 1.3rem;
-        }
-
-        .footer {
-            margin-top: 32px;
-            color: #666;
-            font-size: 0.85rem;
-        }
-
-        .tag {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            margin: 4px;
-            color: #ccc;
-        }
+      /* 响应式 */
+      @media (max-width: 600px) {
+        .clock-card { padding: 2rem 1.5rem; }
+        .links { grid-template-columns: 1fr; }
+        h1 { font-size: 1.8rem; }
+      }
     </style>
-</head>
-<body>
-<div class="container">
+  </head>
+  <body>
+    <!-- 背景光斑 -->
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
 
-    <div class="clock-card">
+    <div class="container">
+      <!-- 时钟卡片 -->
+      <div class="clock-card" role="timer" aria-label="精确北京时间">
         <div class="label">Beijing Time · UTC+8</div>
         <div class="date-display" id="dateDisplay">----年--月--日 星期-</div>
         <div class="time-wrapper">
-            <span class="time-main" id="timeMain">--:--:--</span>
-            <span class="time-ms" id="timeMs">---</span>
+          <span class="time-main" id="timeMain" aria-live="polite">--:--:--</span>
+          <span class="time-ms" id="timeMs" aria-hidden="true">---</span>
         </div>
-    </div>
-    
-        <!-- 头像 -->
-        <div class="avatar">😎</div>
+      </div>
 
-        <!-- 名字 -->
-        <h1>你好，我是Lorraine</h1>
-        <p class="subtitle">🧑‍💻 开发者 · 📝 写作者 · 🚀 终身学习者</p>
+      <!-- 个人信息 -->
+      <h1>你好，我是 Lorraine</h1>
+      <p class="subtitle">💻 开发者 · 📝 写作者 · 🚀 终身学习者</p>
 
-        <!-- 介绍卡片 -->
-        <div class="card">
-            <p>
-                欢迎来到我的个人主页！这里是我在互联网上的一片小天地。
-                喜欢折腾代码、分享技术、记录生活。
-            </p>
-            <div style="margin-top: 16px;">
-                <span class="tag">HTML</span>
-                <span class="tag">CSS</span>
-                <span class="tag">JavaScript</span>
-                <span class="tag">Python</span>
-            </div>
-        </div>
-
-        <!-- 链接按钮 -->
-        <div class="links">
-            <a href="#" class="link-btn">
-                <span class="icon">📂</span> 我的项目
-            </a>
-            <a href="#" class="link-btn">
-                <span class="icon">📝</span> 博客文章
-            </a>
-            <a href="#" class="link-btn">
-                <span class="icon">🐙</span> GitHub
-            </a>
-            <a href="#" class="link-btn">
-                <span class="icon">💬</span> 联系我
-            </a>
-        </div>
-
-        <!-- 页脚 -->
-        <p class="footer">
-            © 2026 Lorraine · 由 Cloudflare Pages 驱动 · 全世界秒开 🚀
+      <div class="card">
+        <p>
+          欢迎来到我的个人主页！这里是我在互联网上的一片小天地。<br />
+          喜欢折腾代码、分享技术、记录生活。
         </p>
+        <div class="tags">
+          <span class="tag">HTML</span>
+          <span class="tag">CSS</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">Python</span>
+        </div>
+      </div>
+
+      <!-- 链接 -->
+      <div class="links">
+        <a href="#" class="link-btn"><span>📂</span> 我的项目</a>
+        <a href="#" class="link-btn"><span>📝</span> 博客文章</a>
+        <a href="#" class="link-btn"><span>🐙</span> GitHub</a>
+        <a href="#" class="link-btn"><span>💬</span> 联系我</a>
+      </div>
+
+      <p class="footer">© 2026 Lorraine · 由 Cloudflare Pages 驱动 · 全世界秒开 🚀</p>
     </div>
+
     <script>
-        // 使用 Intl API 确保时区始终为北京时间，不受本地系统时区影响
-        const bjDateFormatter = new Intl.DateTimeFormat('zh-CN', {
-            timeZone: 'Asia/Shanghai',
-            year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'long'
-        });
+      const dateEl = document.getElementById("dateDisplay");
+      const timeMainEl = document.getElementById("timeMain");
+      const timeMsEl = document.getElementById("timeMs");
 
-        const bjTimeFormatter = new Intl.DateTimeFormat('zh-CN', {
-            timeZone: 'Asia/Shanghai',
-            hour: '2-digit', minute: '2-digit', second: '2-digit',
-            hour12: false
-        });
+      const bjDateFormatter = new Intl.DateTimeFormat("zh-CN", {
+        timeZone: "Asia/Shanghai",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        weekday: "long",
+      });
 
-        const dateEl = document.getElementById('dateDisplay');
-        const timeMainEl = document.getElementById('timeMain');
-        const timeMsEl = document.getElementById('timeMs');
+      let lastSecond = -1;
+      let lastMinute = -1;
 
-        let lastSecond = -1;
+      function updateClock() {
+        const now = new Date();
 
-        function updateClock() {
-            const now = new Date();
-            
-            // 获取北京时间的各部分
-            // 注意：为了精确获取毫秒，我们直接使用 UTC 偏移计算
-            // 因为 Intl 格式化毫秒在不同浏览器支持不一致
-            const utc = now.getTime() + now.getTimezoneOffset() * 60000;
-            const bjNow = new Date(utc + 8 * 3600000);
-            
-            const h = String(bjNow.getHours()).padStart(2, '0');
-            const m = String(bjNow.getMinutes()).padStart(2, '0');
-            const s = String(bjNow.getSeconds()).padStart(2, '0');
-            const ms = String(bjNow.getMilliseconds()).padStart(3, '0');
+        // 手动计算北京时间毫秒（避免 Intl 毫秒兼容性问题）
+        const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+        const bjNow = new Date(utc + 8 * 3600000);
 
-            // 仅在秒数变化时更新日期和主时间字符串，减少 DOM 重排
-            const currentSecond = s;
-            if (currentSecond !== lastSecond) {
-                timeMainEl.textContent = `${h}:${m}:${s}`;
-                
-                // 更新日期（每秒检查一次足够）
-                const dateParts = bjDateFormatter.formatToParts(now);
-                const getPart = (type) => dateParts.find(p => p.type === type)?.value || '';
-                dateEl.textContent = `${getPart('year')}年${getPart('month')}月${getPart('day')}日 ${getPart('weekday')}`;
-                
-                lastSecond = currentSecond;
-            }
+        const h = String(bjNow.getHours()).padStart(2, "0");
+        const m = String(bjNow.getMinutes()).padStart(2, "0");
+        const s = String(bjNow.getSeconds()).padStart(2, "0");
+        const ms = String(bjNow.getMilliseconds()).padStart(3, "0");
 
-            // 毫秒每帧都更新
-            timeMsEl.textContent = ms;
+        const currentSecond = parseInt(s, 10);
+        const currentMinute = parseInt(m, 10);
 
-            requestAnimationFrame(updateClock);
+        // 仅在秒变化时更新主时间
+        if (currentSecond !== lastSecond) {
+          timeMainEl.textContent = `${h}:${m}:${s}`;
+          lastSecond = currentSecond;
         }
 
-        // 启动时钟
+        // 仅在分钟变化时更新日期（减少昂贵的 formatToParts 调用）
+        if (currentMinute !== lastMinute) {
+          const parts = bjDateFormatter.formatToParts(now);
+          const get = (type) => parts.find((p) => p.type === type)?.value || "";
+          dateEl.textContent = `${get("year")}年${get("month")}月${get("day")}日 ${get("weekday")}`;
+          lastMinute = currentMinute;
+        }
+
+        // 毫秒每帧更新
+        timeMsEl.textContent = ms;
+
         requestAnimationFrame(updateClock);
+      }
+
+      requestAnimationFrame(updateClock);
     </script>
-</body>
+  </body>
 </html>
